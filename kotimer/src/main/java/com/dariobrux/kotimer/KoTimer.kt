@@ -16,12 +16,22 @@ class KoTimer {
     private var status: Status? = null
     private var listener: OnTimerListener? = null
 
-    private var initialTimerDuration: Long = 0L
-    private var currentDuration: Long = 0L
+    private var initialTimerDuration = 0L
+    private var currentDuration = 0L
+    private var startDelay = 0L
+    private var isDaemon = false
 
     fun setDuration(duration: Long) {
         initialTimerDuration = duration
         currentDuration = duration
+    }
+
+    fun setIsDaemon(isDaemon: Boolean) {
+        this.isDaemon = isDaemon
+    }
+
+    fun setStartDelay(delay: Long) {
+        this.startDelay = delay
     }
 
     fun setOnRunListener(listener: OnTimerListener) {
@@ -37,11 +47,21 @@ class KoTimer {
         // When the status is end or stop I must reinitialize the duration to initial duration.
         if (status == Status.END || status == Status.STOP) {
             currentDuration = initialTimerDuration
+            status = null
         }
 
-        status = Status.RUN
+        val delay = when (status) {
+            null -> {
+                startDelay
+            }
+            else -> {
+                0
+            }
+        }
 
-        timer = fixedRateTimer("timer", true, 0, 1000) {
+        status = Status.START
+
+        timer = fixedRateTimer("timer", isDaemon, delay, 1000) {
 
             currentDuration -= 1_000
 
@@ -53,10 +73,14 @@ class KoTimer {
                 return@fixedRateTimer
             }
 
+            if (status == Status.START) {
+                listener?.onTimerStarted()
+            }
+
+            status = Status.RUN
+
             listener?.onTimerRun(currentDuration)
         }
-
-        listener?.onTimerStarted()
     }
 
     private fun end() {
