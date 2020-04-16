@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity(), OnTimerListener, View.OnClickListener 
 
     private var koTimer: KoTimer = KoTimer()
     private var animator: ValueAnimator? = null
-    private var timerDuration = 20_000L
-
+    private var timerDuration = 22220_000L
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), OnTimerListener, View.OnClickListener 
         btnStop?.setOnClickListener(this)
         btnPause?.setOnClickListener(this)
 
-        koTimer.setDuration(20_000)
+        koTimer.setDuration(timerDuration)
         koTimer.setOnRunListener(this)
     }
 
@@ -39,14 +39,13 @@ class MainActivity : AppCompatActivity(), OnTimerListener, View.OnClickListener 
 
     private fun stop() {
         koTimer.stop()
-        koTimer.setDuration(20_000)
     }
 
     override fun onTimerRun(milliseconds: Long) {
 
         val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(hours)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(minutes) - TimeUnit.HOURS.toSeconds(hours)
 
         val text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 

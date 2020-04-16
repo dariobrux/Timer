@@ -94,6 +94,7 @@ class KoTimer {
             cancel()
             purge()
         }
+        timer = null
         currentDuration = 0
     }
 }
