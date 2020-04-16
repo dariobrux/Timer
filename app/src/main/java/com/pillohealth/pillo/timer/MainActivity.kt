@@ -6,11 +6,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.dariobrux.kotimer.KoTimer
+import com.dariobrux.kotimer.interfaces.OnTimerListener
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity(), TimerManager.OnTimerListener, View.OnClickListener {
+class MainActivity : AppCompatActivity(), OnTimerListener, View.OnClickListener {
 
-    private var timerManager : TimerManager = TimerManager()
+    private var koTimer: KoTimer = KoTimer()
     private var animator: ValueAnimator? = null
     private var timerDuration = 20_000L
 
@@ -22,24 +25,31 @@ class MainActivity : AppCompatActivity(), TimerManager.OnTimerListener, View.OnC
         btnStop?.setOnClickListener(this)
         btnPause?.setOnClickListener(this)
 
-        timerManager.setDuration(20_000)
-        timerManager.setOnRunListener(this)
+        koTimer.setDuration(20_000)
+        koTimer.setOnRunListener(this)
     }
 
     private fun start() {
-        timerManager.start()
+        koTimer.start()
     }
 
     private fun pause() {
-        timerManager.pause()
+        koTimer.pause()
     }
 
     private fun stop() {
-        timerManager.stop()
-        timerManager.setDuration(20_000)
+        koTimer.stop()
+        koTimer.setDuration(20_000)
     }
 
-    override fun onTimerRun(text: String) {
+    override fun onTimerRun(milliseconds: Long) {
+
+        val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
+
+        val text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
         runOnUiThread {
             txt?.text = text
         }
