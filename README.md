@@ -43,7 +43,7 @@ timer.setStartDelay(0L)
 timer.setOnTimerListener(this, true)
 ~~~~
 
-To start/resume, pause and stop you can call
+To start/resume, pause and stop you can call:
 ~~~~ kotlin
 timer.start()
 timer.pause()
