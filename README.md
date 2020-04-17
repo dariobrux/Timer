@@ -6,7 +6,7 @@ This library is a simple Timer for Android, written in Kotlin.
 
 It's very simple and it works in background or in foreground. 
 
-> The above preview it's a simple Activity test that's not included into the library. The library contains only the Timer object that you can use whatever you want.
+> The above preview is a simple Activity test that's not included into the library. The library contains only the Timer object that you can use whatever you want.
 
 ## Import using Gradle
 Step 1. Add it in your root build.gradle at the end of repositories:
