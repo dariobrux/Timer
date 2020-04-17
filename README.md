@@ -57,8 +57,6 @@ You can invoke the callbacks by `OnTimerListener`, via `timer.setOnTimerListener
 * `onTimerStopped()` invoked when `timer.stop()` is called.
 * `onTimerEnded()` invoked when the timer ends.
 
-**I appreciate every kind of pull requests to improve this library.**
-
 ## License
 ~~~~
 Copyright 2020 Dario Bruzzese
