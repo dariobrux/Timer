@@ -2,7 +2,6 @@ package com.dariobrux.kotimer
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.dariobrux.kotimer.enums.Status
 import com.dariobrux.kotimer.interfaces.OnTimerListener
 import java.util.Timer
@@ -14,7 +13,7 @@ import kotlin.concurrent.fixedRateTimer
  */
 class Timer {
 
-    private val handler : Handler by lazy { Handler(Looper.getMainLooper()) }
+    private val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
     private var timer: Timer? = null
     private var status: Status? = null
@@ -70,8 +69,6 @@ class Timer {
         timer = fixedRateTimer("timer", isDaemon, delay, 1000) {
 
             currentDuration -= 1_000
-
-            Log.d("Timer", currentDuration.toString())
 
             // When I arrive to -1 it means that all the milliseconds at 0 seconds are passed.
             if (currentDuration == -1_000L) {

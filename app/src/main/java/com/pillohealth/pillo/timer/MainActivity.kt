@@ -3,6 +3,7 @@ package com.pillohealth.pillo.timer
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -43,17 +44,17 @@ class MainActivity : AppCompatActivity(), OnTimerListener, View.OnClickListener 
 
     override fun onTimerRun(milliseconds: Long) {
 
+        Log.d("Timer", milliseconds.toString())
+
         val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
         val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(hours)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(minutes) - TimeUnit.HOURS.toSeconds(hours)
 
         val text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
-        runOnUiThread {
-            txt?.text = text
-            progress.progressTintList = ColorStateList.valueOf(Color.RED)
-            progress?.progress = ((milliseconds * 100) / 10_000L).toInt()
-        }
+        txt?.text = text
+        progress?.progressTintList = ColorStateList.valueOf(Color.RED)
+        progress?.progress = ((milliseconds * 100) / 10_000L).toInt()
     }
 
     override fun onTimerStarted() {
@@ -70,9 +71,7 @@ class MainActivity : AppCompatActivity(), OnTimerListener, View.OnClickListener 
 
     override fun onTimerEnded() {
         Toast.makeText(this, "Timer ended", Toast.LENGTH_SHORT).show()
-        runOnUiThread {
-            progress.progressTintList = ColorStateList.valueOf(Color.GREEN)
-        }
+        progress.progressTintList = ColorStateList.valueOf(Color.GREEN)
     }
 
     override fun onClick(view: View?) {
