@@ -41,11 +41,12 @@ timer.setStartDelay(0L)
 
 // Setting true, the callbacks are invoked on the main thread.
 timer.setOnTimerListener(this, true)
+~~~~
 
+To start/resume, pause and stop you can call
+~~~~ kotlin
 timer.start()
-
 timer.pause()
-
 timer.stop()
 ~~~~
 
