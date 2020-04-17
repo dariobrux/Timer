@@ -1,16 +1,20 @@
 package com.dariobrux.kotimer
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.dariobrux.kotimer.enums.Status
 import com.dariobrux.kotimer.interfaces.OnTimerListener
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.fixedRateTimer
 
 /**
  * Created by Dario Bruzzese
  * on 2/11/2020
  */
-class KoTimer {
+class Timer {
+
+    private val handler : Handler by lazy { Handler(Looper.getMainLooper()) }
 
     private var timer: Timer? = null
     private var status: Status? = null
@@ -20,6 +24,7 @@ class KoTimer {
     private var currentDuration = 0L
     private var startDelay = 0L
     private var isDaemon = false
+    private var callbacksOnMainThread = false
 
     fun setDuration(duration: Long) {
         initialTimerDuration = duration
@@ -34,8 +39,9 @@ class KoTimer {
         this.startDelay = delay
     }
 
-    fun setOnRunListener(listener: OnTimerListener) {
+    fun setOnTimerListener(listener: OnTimerListener, callbacksOnMainThread: Boolean) {
         this.listener = listener
+        this.callbacksOnMainThread = callbacksOnMainThread
     }
 
     fun start() {
@@ -74,12 +80,26 @@ class KoTimer {
             }
 
             if (status == Status.START) {
-                listener?.onTimerStarted()
+                execute {
+                    listener?.onTimerStarted()
+                }
             }
 
             status = Status.RUN
 
-            listener?.onTimerRun(currentDuration)
+            execute {
+                listener?.onTimerRun(currentDuration)
+            }
+        }
+    }
+
+    private fun execute(f: () -> Unit) {
+        if (callbacksOnMainThread) {
+            handler.post {
+                f.invoke()
+            }
+        } else {
+            f.invoke()
         }
     }
 
@@ -89,7 +109,9 @@ class KoTimer {
         }
         status = Status.END
         recycle()
-        listener?.onTimerEnded()
+        execute {
+            listener?.onTimerEnded()
+        }
     }
 
     fun stop() {
@@ -98,7 +120,9 @@ class KoTimer {
         }
         status = Status.STOP
         recycle()
-        listener?.onTimerStopped()
+        execute {
+            listener?.onTimerStopped()
+        }
     }
 
     fun pause() {
@@ -110,7 +134,9 @@ class KoTimer {
             cancel()
             purge()
         }
-        listener?.onTimerPaused(currentDuration)
+        execute {
+            listener?.onTimerPaused(currentDuration)
+        }
     }
 
     private fun recycle() {
