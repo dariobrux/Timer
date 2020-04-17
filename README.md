@@ -28,9 +28,18 @@ dependencies {
 ## How to use via code (Kotlin)
 ~~~~ kotlin
 val timer: Timer = Timer()
+
+// The duration is always in milliseconds.
 timer.setDuration(10_000L)
+
+// The timer is a daemon when it also runs when the application is destroyed. 
+// In this case passing false, it works only when the application is active.
 timer.setIsDaemon(false)
+
+// The delay is always in milliseconds.
 timer.setStartDelay(0L)
+
+// Setting true, the callbacks are invoked on the main thread.
 timer.setOnTimerListener(this, true)
 
 timer.start()
