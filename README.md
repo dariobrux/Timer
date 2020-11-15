@@ -21,7 +21,7 @@ allprojects {
 Step 2. Add the dependency
 ~~~~ gradle
 dependencies {
-    implementation 'com.github.dariobrux:Timer:1.0.0'
+    implementation 'com.github.dariobrux:Timer:1.1.0'
 }
 ~~~~
 
@@ -56,6 +56,8 @@ You can invoke the callbacks by `OnTimerListener`, via `timer.setOnTimerListener
 * `onTimerRun(milliseconds: Long)` invoked when the timer is running. The `milliseconds` are the elapsed milliseconds.
 * `onTimerStopped()` invoked when `timer.stop()` is called.
 * `onTimerEnded()` invoked when the timer ends.
+
+You could also use the `OnTimerListenerAdapter` to avoid to override all callbacks in your class.
 
 ## License
 ~~~~
