@@ -71,7 +71,7 @@ class Timer {
             currentDuration -= 1_000
 
             // When I arrive to -1 it means that all the milliseconds at 0 seconds are passed.
-            if (currentDuration == -1_000L) {
+            if (currentDuration <= -1_000L) {
                 end()
                 return@fixedRateTimer
             }
